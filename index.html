@@ -167,7 +167,7 @@
 						</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
-							<div id="morris-area-chart"></div>
+							<div id="hashrate-chart"></div>
 						</div>
 						<!-- /.panel-body -->
 					</div>
@@ -571,12 +571,64 @@
 			$.post('http://localhost:3123/rentals', {api_key: "password", amount: -1}, function(data, status){
 				rentalLogs = data;
 				console.log(rentalLogs);
-				//appendLogs();
+				loadDashboard();
 			}, 'JSON');
 		}
 
 		var loadDashboard = function(){
-			
+			var chartData = [];
+			var chartykeys = [];
+			var chartlabels = [];
+			var miners = [];
+
+			// chartData.push({period: ((Math.floor(Date.now() / 1000)) - (60*60*24)) * 1000 });
+
+			for (var i = 0; i < rentalLogs.logs.length; i++) {
+				var responseJSON = JSON.parse(rentalLogs.logs[i].response);
+				var data = {};
+				if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
+					continue;
+				}
+				if(responseJSON.data){
+					for (var j = 0; j < responseJSON.data.records.length; j++) {
+						var minerID = responseJSON.data.records[j].id;
+						var minerName = responseJSON.data.records[j].name;
+						var minerCurrentHashrate = responseJSON.data.records[j].current.hash_30m;
+
+						if (!miners[minerID])
+							miners[minerID] = minerName;
+
+						data[minerID] = minerCurrentHashrate
+					}
+					var timestamp = rentalLogs.logs[i].timestamp;
+					data['period'] = timestamp * 1000;
+					chartData.push(data);
+				}
+			}
+			for (var miner in miners){
+				chartlabels.push(parseInt(miner));
+				chartykeys.push(parseInt(miner));
+			}
+			for (var data in chartData){
+				for (var miner in miners) {
+					if (!chartData[data][miner])
+						chartData[data][miner] = 0;
+				}
+			}
+
+			console.log(chartData);
+			console.log(chartykeys);
+			console.log(chartlabels);
+			Morris.Area({
+		        element: 'hashrate-chart',
+		        data: chartData,
+		        xkey: 'period',
+		        ykeys: chartykeys,
+		        labels: chartlabels,
+		        pointSize: 2,
+		        hideHover: 'auto',
+		        resize: true
+		    });
 		}
 
 		var showDashboard = function(){
