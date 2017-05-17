@@ -75,7 +75,7 @@
 							<a href="config.html"><i class="fa fa-check-square-o fa-fw"></i> Config</a>
 						</li>
 						<li>
-							<a href="fulllog.html"><i class="fa fa-list fa-fw"></i> Logs</a>
+							<a href="logs.html"><i class="fa fa-list fa-fw"></i> Logs</a>
 						</li>
 					</ul>
 				</div>
@@ -97,11 +97,18 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<i class="fa fa-bell fa-fw"></i> All logs
+							<div style="float: right; margin-top: -7px;">
+								<button class="btn btn-default" onclick="togButton('info')"><i class="fa fa-info fa-fw"></i>Info</button>
+								<button class="btn btn-success" onclick="togButton('rentals')"><i class="fa fa-credit-card fa-fw"></i>Rentals</button>
+								<button class="btn btn-danger" onclick="togButton('errors')"><i class="fa fa-bolt fa-fw"></i>Errors</button>
+							</div>
 						</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
-							<div class="list-group">
-								<a href="#" class="list-group-item">
+							<div class="list-group" id="logList">
+								<button style="vertical-align: center; align-self: center" class="btn btn-default" onclick="togButton('load')"><i class="fa fa-loading fa-fw"></i>Load Logs</button>
+
+								<!--<a href="#" class="list-group-item">
 									<i class="fa fa-comment fa-fw"></i> New Comment
 									<span class="pull-right text-muted small"><em>4 minutes ago</em>
 									</span>
@@ -121,13 +128,13 @@
 									<span class="pull-right text-muted small"><em>43 minutes ago</em>
 									</span>
 								</a>
-								<a href="#" class="list-group-item">
+								<a href="#" class="list-group-item list-group-item-warning">
 									<i class="fa fa-upload fa-fw"></i> Server Rebooted
 									<span class="pull-right text-muted small"><em>11:32 AM</em>
 									</span>
 								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-bolt fa-fw"></i> Server Crashed!
+								<a href="#" class="list-group-item list-group-item-danger">
+									<i class="fa fa-bolt fa-fw"></i> <span class="">Server Crashed!</span>
 									<span class="pull-right text-muted small"><em>11:13 AM</em>
 									</span>
 								</a>
@@ -145,107 +152,7 @@
 									<i class="fa fa-money fa-fw"></i> Payment Received
 									<span class="pull-right text-muted small"><em>Yesterday</em>
 									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
+								</a>-->
 							</div>
 							<!-- /.list-group -->
 						</div>
@@ -277,6 +184,71 @@
 
 	<!-- Custom Theme JavaScript -->
 	<script src="./js/sb-admin-2.js"></script>
+
+	<script type="text/javascript">
+		var info = true;
+		var rentals = true;
+		var errors = true;
+
+		var logs = {};
+
+		var togButton = function(type){
+			if (type == 'info')
+				info = !info;
+			if (type == 'rentals')
+				rentals = !rentals;
+			if (type == 'errors')
+				errors = !errors;
+
+			appendLogs();
+		}
+
+		var appendLogs = function(){
+			$('#logList').empty();
+			var data = logs;
+			var numAppended = 0;
+			for (var i = 0; i < data.logs.length; i++) {
+				if (numAppended >= 1000)
+					continue;
+				if (data.logs[i].type == 'error'){
+					if (!errors)
+						continue;
+					var color = 'danger';
+					var fontAwe = 'bolt';
+				}
+				if (data.logs[i].type == 'info'){
+					if (!info)
+						continue;
+					var color = 'primary';
+					var fontAwe = 'info';
+				}
+				if (data.logs[i].type == 'rental'){
+					if (!rentals)
+						continue;
+					var color = 'success';
+					var fontAwe = 'server';
+				}
+				var message = data.logs[i].message;
+				var time = new Date(data.logs[i].timestamp * 1000);
+				$('#logList').append('<a href="#" class="list-group-item ' + (color ? 'list-group-item-' + color : "") + '">\
+										  <i class="fa fa-' + fontAwe + ' fa-fw"></i> <span class="">' + message + '</span>\
+										  <span class="pull-right text-muted small"><em>' + time + '</em>\
+										  </span>\
+									  </a>');
+				numAppended++;
+			}
+		}
+
+		var getLogs = function(){
+			$.post('http://localhost:3123/logs', {api_key: "password", amount: -1}, function(data, status){
+				logs = data;
+				console.log(logs);
+				appendLogs();
+			}, 'JSON');
+		}
+
+		getLogs();
+	</script>
 
 </body>
 
