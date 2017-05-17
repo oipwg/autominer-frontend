@@ -69,13 +69,13 @@
 							<!-- /input-group -->
 						</li>
 						<li>
-							<a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+							<a href="#" onclick="showDashboard()"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
 						</li>
 						<li>
-							<a href="config.html"><i class="fa fa-check-square-o fa-fw"></i> Config</a>
+							<a href="#" onclick="showConfig()"><i class="fa fa-check-square-o fa-fw"></i> Config</a>
 						</li>
 						<li>
-							<a href="logs.html"><i class="fa fa-list fa-fw"></i> Logs</a>
+							<a href="#" onclick="showLogs()"><i class="fa fa-list fa-fw"></i> Logs</a>
 						</li>
 					</ul>
 				</div>
@@ -84,7 +84,8 @@
 			<!-- /.navbar-static-side -->
 		</nav>
 
-		<div id="page-wrapper">
+		<!-- #dashboard -->
+		<div id="page-wrapper" class="dashboard">
 			<div class="row">
 				<div class="col-lg-12">
 					<h1 class="page-header">Dashboard</h1>
@@ -315,7 +316,173 @@
 			</div>
 			<!-- /.row -->
 		</div>
-		<!-- /#page-wrapper -->
+		<!-- /#dashboard -->
+
+		<!-- #config -->
+		<div id="page-wrapper" class="config">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Config</h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-8">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-4 control-label">MiningRigRentals API Key</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="inputEmail3" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">MiningRigRentals API Secret</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="inputPassword3" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Weekly BTC Budget</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="inputPassword3" placeholder="0.01">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Minimum Margin</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="inputPassword3" placeholder="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Rental Length</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="inputPassword3" placeholder="24">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">RPI Threshold</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" id="inputPassword3" placeholder="80">
+								<p class="help-block">Minimum RPI (Rating based on avaiablility and past success) to rent rigs at. Will not rent any rigs under this RPI.</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Profile</label>
+							<div class="col-sm-4">
+								<select class="form-control">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Profile</label>
+							<div class="col-sm-8">
+								<input type="checkbox"> Spend entire weekly budget if conditions are met
+								<p class="help-block">If this box is checked the application will rent up as many machines as meet the minimum requirements and possibily spend your entire budget. If this is not checked it will make sure to spread out the cost over the entire week rather than all at once.</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<button class="btn btn-default">Save</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /#config -->
+
+		<!-- #logs -->
+		<div id="page-wrapper" class="logs">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Logs</h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<i class="fa fa-bell fa-fw"></i> All logs
+							<div style="float: right; margin-top: -7px;">
+								<button class="btn btn-default" onclick="togButton('info')"><i class="fa fa-info fa-fw"></i>Info</button>
+								<button class="btn btn-success" onclick="togButton('rentals')"><i class="fa fa-credit-card fa-fw"></i>Rentals</button>
+								<button class="btn btn-danger" onclick="togButton('errors')"><i class="fa fa-bolt fa-fw"></i>Errors</button>
+							</div>
+						</div>
+						<!-- /.panel-heading -->
+						<div class="panel-body">
+							<div class="list-group" id="logList">
+								<button style="vertical-align: center; align-self: center" class="btn btn-default" onclick="togButton('load')"><i class="fa fa-loading fa-fw"></i>Load Logs</button>
+
+								<!--<a href="#" class="list-group-item">
+									<i class="fa fa-comment fa-fw"></i> New Comment
+									<span class="pull-right text-muted small"><em>4 minutes ago</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-twitter fa-fw"></i> 3 New Followers
+									<span class="pull-right text-muted small"><em>12 minutes ago</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-envelope fa-fw"></i> Message Sent
+									<span class="pull-right text-muted small"><em>27 minutes ago</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-tasks fa-fw"></i> New Task
+									<span class="pull-right text-muted small"><em>43 minutes ago</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item list-group-item-warning">
+									<i class="fa fa-upload fa-fw"></i> Server Rebooted
+									<span class="pull-right text-muted small"><em>11:32 AM</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item list-group-item-danger">
+									<i class="fa fa-bolt fa-fw"></i> <span class="">Server Crashed!</span>
+									<span class="pull-right text-muted small"><em>11:13 AM</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-warning fa-fw"></i> Server Not Responding
+									<span class="pull-right text-muted small"><em>10:57 AM</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
+									<span class="pull-right text-muted small"><em>9:49 AM</em>
+									</span>
+								</a>
+								<a href="#" class="list-group-item">
+									<i class="fa fa-money fa-fw"></i> Payment Received
+									<span class="pull-right text-muted small"><em>Yesterday</em>
+									</span>
+								</a>-->
+							</div>
+							<!-- /.list-group -->
+						</div>
+						<!-- /.panel-body -->
+					</div>
+				</div>
+				<!-- /.col-lg-4 -->
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /#logs -->
 
 	</div>
 	<!-- /#wrapper -->
@@ -336,6 +503,104 @@
 
 	<!-- Custom Theme JavaScript -->
 	<script src="./js/sb-admin-2.js"></script>
+
+	<script type="text/javascript">
+		var info = true;
+		var rentals = true;
+		var errors = true;
+
+		var logs = {};
+		var rentalLogs = {};
+
+		var togButton = function(type){
+			if (type == 'info')
+				info = !info;
+			if (type == 'rentals')
+				rentals = !rentals;
+			if (type == 'errors')
+				errors = !errors;
+
+			appendLogs();
+		}
+
+		var appendLogs = function(){
+			$('#logList').empty();
+			var data = logs;
+			var numAppended = 0;
+			for (var i = 0; i < data.logs.length; i++) {
+				if (numAppended >= 1000)
+					continue;
+				if (data.logs[i].type == 'error'){
+					if (!errors)
+						continue;
+					var color = 'danger';
+					var fontAwe = 'bolt';
+				}
+				if (data.logs[i].type == 'info'){
+					if (!info)
+						continue;
+					var color = 'primary';
+					var fontAwe = 'info';
+				}
+				if (data.logs[i].type == 'rental'){
+					if (!rentals)
+						continue;
+					var color = 'success';
+					var fontAwe = 'server';
+				}
+				var message = data.logs[i].message;
+				var time = new Date(data.logs[i].timestamp * 1000);
+				$('#logList').append('<a href="#" class="list-group-item ' + (color ? 'list-group-item-' + color : "") + '">\
+										  <i class="fa fa-' + fontAwe + ' fa-fw"></i> <span class="">' + message + '</span>\
+										  <span class="pull-right text-muted small"><em>' + time + '</em>\
+										  </span>\
+									  </a>');
+				numAppended++;
+			}
+		}
+
+		var getLogs = function(){
+			$.post('http://localhost:3123/logs', {api_key: "password", amount: -1}, function(data, status){
+				logs = data;
+				console.log(logs);
+				appendLogs();
+			}, 'JSON');
+		}
+
+		var getRental = function(){
+			$.post('http://localhost:3123/rentals', {api_key: "password", amount: -1}, function(data, status){
+				rentalLogs = data;
+				console.log(rentalLogs);
+				//appendLogs();
+			}, 'JSON');
+		}
+
+		var loadDashboard = function(){
+			
+		}
+
+		var showDashboard = function(){
+			$('.dashboard').show();
+			$('.config').hide();
+			$('.logs').hide();
+		}
+
+		var showConfig = function(){
+			$('.dashboard').hide();
+			$('.config').show();
+			$('.logs').hide();
+		}
+
+		var showLogs = function(){
+			$('.dashboard').hide();
+			$('.config').hide();
+			$('.logs').show();
+		}
+
+		showDashboard();
+		getLogs();
+		getRental();
+	</script>
 
 </body>
 

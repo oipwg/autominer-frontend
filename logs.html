@@ -191,6 +191,7 @@
 		var errors = true;
 
 		var logs = {};
+		var rentalLogs = {};
 
 		var togButton = function(type){
 			if (type == 'info')
@@ -247,7 +248,16 @@
 			}, 'JSON');
 		}
 
+		var getRental = function(){
+			$.post('http://localhost:3123/rentals', {api_key: "password", amount: -1}, function(data, status){
+				rentalLogs = data;
+				console.log(rentalLogs);
+				//appendLogs();
+			}, 'JSON');
+		}
+
 		getLogs();
+		getRental();
 	</script>
 
 </body>
