@@ -102,8 +102,8 @@
 									<i class="fa fa-tasks fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge" id="numberOfMiners">3</div>
-									<div>Current Miners</div>
+									<div class="huge" id="numberOfMiners">0</div>
+									<div id="numberOfMinersLabel">Current Miners</div>
 								</div>
 							</div>
 						</div>
@@ -556,7 +556,7 @@
 					for (var j = 0; j < responseJSON.data.records.length; j++) {
 						var minerID = responseJSON.data.records[j].id;
 						var minerName = responseJSON.data.records[j].name;
-						var minerCurrentHashrate = responseJSON.data.records[j].current.hash_30m;
+						var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
 
 						if (!miners[minerID])
 							miners[minerID] = minerName;
@@ -586,6 +586,8 @@
 		        element: 'hashrate-chart',
 		        data: chartData,
 		        xkey: 'period',
+		        xLabels: "hour",
+		        postUnits: "MH/s",
 		        ykeys: chartykeys,
 		        labels: chartlabels,
 		        pointSize: 2,
@@ -597,6 +599,11 @@
 		    if (rentalLogs.logs[0]){
 		    	var resJSON = JSON.parse(rentalLogs.logs[0].response);
 		    	var numberOfMiners = resJSON.data.records.length;
+		    	if (numberOfMiners == 1)
+		    		$('#numberOfMinersLabel').text('Current Miner');
+		    	else
+		    		$('#numberOfMinersLabel').text('Current Miners');
+
 		    	$('#numberOfMiners').text(numberOfMiners);
 		    }
 
