@@ -94,7 +94,7 @@
 			</div>
 			<!-- /.row -->
 			<div class="row">
-				<div class="col-lg-6 col-md-6">
+				<div class="col-lg-4 col-md-4">
 					<div class="panel panel-green">
 						<div class="panel-heading">
 							<div class="row">
@@ -116,7 +116,29 @@
 						</a>
 					</div>
 				</div>
-				<div class="col-lg-6 col-md-6">
+				<div class="col-lg-4 col-md-4">
+					<div class="panel panel-red">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-area-chart fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge" id="hashrateText">0MH/s</div>
+									<div id="">Current Hashrate</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+								<span class="pull-left">View Details</span>
+								<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+								<div class="clearfix"></div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4">
 					<div class="panel panel-yellow">
 						<div class="panel-heading">
 							<div class="row">
@@ -503,7 +525,7 @@
 				if (data.logs[i].type == 'rental'){
 					if (data.logs[i].timestamp > (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
 						var dataJSON = JSON.parse(data.logs[i].extrainfo);
-						spentThisWeek += dataJSON.data.price;
+						spentThisWeek += parseFloat(dataJSON.data.price);
 					}
 
 					if (numAppended < 10) {
@@ -519,7 +541,7 @@
 				}
 			}
 
-			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek) + ' BTC');
+			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek).toFixed(8) + ' BTC');
 		}
 
 		var getLogs = function(){
@@ -605,6 +627,12 @@
 		    		$('#numberOfMinersLabel').text('Current Miners');
 
 		    	$('#numberOfMiners').text(numberOfMiners);
+
+		    	var hashrate = 0;
+		    	for (var i = 0; i < resJSON.data.records.length; i++) {
+		    		hashrate += resJSON.data.records[i].current.hash_30m;
+		    	}
+		    	$('#hashrateText').text((hashrate / 1000000).toFixed(2) + "MH/s");
 		    }
 
 		}
