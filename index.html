@@ -102,7 +102,7 @@
 									<i class="fa fa-tasks fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge">3</div>
+									<div class="huge" id="numberOfMiners">3</div>
 									<div>Current Miners</div>
 								</div>
 							</div>
@@ -124,7 +124,7 @@
 									<i class="fa fa-shopping-cart fa-5x"></i>
 								</div>
 								<div class="col-xs-9 text-right">
-									<div class="huge">0.01827423 BTC</div>
+									<div class="huge" id="btcSpentThisWeek">0 BTC</div>
 									<div>Spent in the past week</div>
 								</div>
 							</div>
@@ -184,61 +184,11 @@
 										<table class="table table-bordered table-hover table-striped">
 											<thead>
 												<tr>
-													<th>#</th>
 													<th>Date</th>
 													<th>Time</th>
-													<th>Amount</th>
 												</tr>
 											</thead>
-											<tbody>
-												<tr>
-													<td>3326</td>
-													<td>10/21/2013</td>
-													<td>3:29 PM</td>
-													<td>$321.33</td>
-												</tr>
-												<tr>
-													<td>3325</td>
-													<td>10/21/2013</td>
-													<td>3:20 PM</td>
-													<td>$234.34</td>
-												</tr>
-												<tr>
-													<td>3324</td>
-													<td>10/21/2013</td>
-													<td>3:03 PM</td>
-													<td>$724.17</td>
-												</tr>
-												<tr>
-													<td>3323</td>
-													<td>10/21/2013</td>
-													<td>3:00 PM</td>
-													<td>$23.71</td>
-												</tr>
-												<tr>
-													<td>3322</td>
-													<td>10/21/2013</td>
-													<td>2:49 PM</td>
-													<td>$8345.23</td>
-												</tr>
-												<tr>
-													<td>3321</td>
-													<td>10/21/2013</td>
-													<td>2:23 PM</td>
-													<td>$245.12</td>
-												</tr>
-												<tr>
-													<td>3320</td>
-													<td>10/21/2013</td>
-													<td>2:15 PM</td>
-													<td>$5663.54</td>
-												</tr>
-												<tr>
-													<td>3319</td>
-													<td>10/21/2013</td>
-													<td>2:13 PM</td>
-													<td>$943.45</td>
-												</tr>
+											<tbody id="spendingTableBody">
 											</tbody>
 										</table>
 									</div>
@@ -259,52 +209,8 @@
 						</div>
 						<!-- /.panel-heading -->
 						<div class="panel-body">
-							<div class="list-group">
-								<a href="#" class="list-group-item">
-									<i class="fa fa-comment fa-fw"></i> New Comment
-									<span class="pull-right text-muted small"><em>4 minutes ago</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-twitter fa-fw"></i> 3 New Followers
-									<span class="pull-right text-muted small"><em>12 minutes ago</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-envelope fa-fw"></i> Message Sent
-									<span class="pull-right text-muted small"><em>27 minutes ago</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-tasks fa-fw"></i> New Task
-									<span class="pull-right text-muted small"><em>43 minutes ago</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-upload fa-fw"></i> Server Rebooted
-									<span class="pull-right text-muted small"><em>11:32 AM</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-bolt fa-fw"></i> Server Crashed!
-									<span class="pull-right text-muted small"><em>11:13 AM</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-warning fa-fw"></i> Server Not Responding
-									<span class="pull-right text-muted small"><em>10:57 AM</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-									<span class="pull-right text-muted small"><em>9:49 AM</em>
-									</span>
-								</a>
-								<a href="#" class="list-group-item">
-									<i class="fa fa-money fa-fw"></i> Payment Received
-									<span class="pull-right text-muted small"><em>Yesterday</em>
-									</span>
-								</a>
+							<div class="list-group" id="notificationsPanel">
+								
 							</div>
 							<!-- /.list-group -->
 							<a href="#" class="btn btn-default btn-block">View All Alerts</a>
@@ -546,17 +452,74 @@
 					if (!rentals)
 						continue;
 					var color = 'success';
-					var fontAwe = 'server';
+					var fontAwe = 'check';
 				}
 				var message = data.logs[i].message;
+
+				if (message == "Finished updating endpoint data, updating calculations!")
+					message = "Updated Calculations"
+
+				if (message.includes("Started up autominer-api")){
+					color = "info"
+					fontAwe = "play"
+				}
+				if (message.includes("Current balance is")){
+					color = "warning"
+					fontAwe = "money"
+				}
+				if (message.includes("Updat")){
+					color = "default"
+					fontAwe = "spinner"
+				}
 				var time = new Date(data.logs[i].timestamp * 1000);
 				$('#logList').append('<a href="#" class="list-group-item ' + (color ? 'list-group-item-' + color : "") + '">\
 										  <i class="fa fa-' + fontAwe + ' fa-fw"></i> <span class="">' + message + '</span>\
 										  <span class="pull-right text-muted small"><em>' + time + '</em>\
 										  </span>\
 									  </a>');
+
+				if (numAppended <= 10){
+					$('#notificationsPanel').append('<a href="#" style="padding-bottom: 25px" class="list-group-item ' + (color ? 'list-group-item-' + color : "") + '">\
+										  <i class="fa fa-' + fontAwe + ' fa-fw"></i> <span class="">' + message + '</span>\
+										  <span class="pull-right text-muted small"><em>' + time + '</em>\
+										  </span>\
+									  </a>');
+				}
 				numAppended++;
 			}
+
+			// Load BTC spent in last week & Spending history.
+		    $('#spendingTableBody').empty();
+		    var data = logs;
+		    var numAppended = 0;
+		    var spentThisWeek = 0;
+		    for (var i = 0; i < data.logs.length; i++) {
+				if (data.logs[i].type == 'error'){
+					continue;
+				}
+				if (data.logs[i].type == 'info'){
+					continue;
+				}
+				if (data.logs[i].type == 'rental'){
+					if (data.logs[i].timestamp > (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
+						var dataJSON = JSON.parse(data.logs[i].extrainfo);
+						spentThisWeek += dataJSON.data.price;
+					}
+
+					if (numAppended < 10) {
+						var time = new Date(data.logs[i].timestamp * 1000);
+						var message = data.logs[i].message;
+						message.replace('Successfully rented rig: ', 'Rented Rig #');
+						$('#spendingTableBody').append('<tr>\
+															<td>' + message + '</td>\
+															<td>' + time + '</td>\
+														</tr>')
+						numAppended++;
+					}
+				}
+			}
+
+			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek) + ' BTC');
 		}
 
 		var getLogs = function(){
@@ -629,6 +592,14 @@
 		        hideHover: 'auto',
 		        resize: true
 		    });
+
+			// Load number of current miners
+		    if (rentalLogs.logs[0]){
+		    	var resJSON = JSON.parse(rentalLogs.logs[0].response);
+		    	var numberOfMiners = resJSON.data.records.length;
+		    	$('#numberOfMiners').text(numberOfMiners);
+		    }
+
 		}
 
 		var showDashboard = function(){
