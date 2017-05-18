@@ -51,7 +51,10 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">Alexandria Autominer</a>
+				<div class="navbar-brand" style="margin-top: -6px">
+					<img style="float: left;" src="./img/alexandria-logo.png" width="30px" height="30px" />
+					<a class="navbar-brand" style="margin-top: -10px; margin-left: -5px; font-size: 20px" href="index.html">ΛLΞXΛNDRIΛ Autominer</a>
+				</div>
 			</div>
 			<p style="text-align: center; margin-top: 10px; margin-bottom: -5px;">Connected to server: <code id="serverIP"></code><button class="btn btn-outline btn-warning" onclick="showLogin()">Edit</button></p>
 			<div style="margin-top: -37px; margin-right: 20px"><button class="btn btn-outline btn-danger pull-right" onclick="logout()">Logout</button></div>
@@ -816,7 +819,13 @@
 		}
 
 		var saveConfig = function(){
-
+			var mrrAPIKey = $('#mrrAPIKey').val();
+			var mrrAPISecret = $('#mrrAPISecret').val();
+			var rpiThreashold = $('#rpiThreashold').val();
+			var minimumMargin = $('#minimumMargin').val();
+			var profileSelect = $('#profileSelect').val();
+			var rentalLength = $('#rentalLength').val();
+			var weeklyBTCBudget = $('#weeklyBTCBudget').val();
 		}
 
 		var showDashboard = function(){
