@@ -619,25 +619,34 @@
 			var chartlabels = [];
 			var miners = [];
 
+			var maxHashrate = 0;
+
 			// chartData.push({period: ((Math.floor(Date.now() / 1000)) - (60*60*24)) * 1000 });
 
 			for (var i = 0; i < rentalLogs.logs.length; i++) {
 				var responseJSON = JSON.parse(rentalLogs.logs[i].response);
 				var data = {};
-				if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
+				if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24)){
 					continue;
 				}
 				if(responseJSON.data){
+					var logTotalHashrate = 0;
 					for (var j = 0; j < responseJSON.data.records.length; j++) {
 						var minerID = responseJSON.data.records[j].id;
 						var minerName = responseJSON.data.records[j].name;
 						var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
+
+						logTotalHashrate += parseFloat(minerCurrentHashrate);
+
 
 						if (!miners[minerID])
 							miners[minerID] = minerName;
 
 						data[minerID] = minerCurrentHashrate
 					}
+					if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
+							maxHashrate = parseFloat(logTotalHashrate);
+						
 					var timestamp = rentalLogs.logs[i].timestamp;
 					data['period'] = timestamp * 1000;
 					chartData.push(data);
@@ -661,6 +670,9 @@
 			// Clear out before generating.
 			$('#hashrate-chart').empty();
 
+			maxHashrate += 25;
+			console.log(maxHashrate);
+
 			Morris.Area({
 		        element: 'hashrate-chart',
 		        data: chartData,
@@ -668,6 +680,7 @@
 		        xLabels: "hour",
 		        postUnits: "MH/s",
 		        ykeys: chartykeys,
+		        ymax: maxHashrate,
 		        labels: chartlabels,
 		        pointSize: 2,
 		        hideHover: 'auto',
