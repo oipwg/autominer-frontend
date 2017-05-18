@@ -59,6 +59,9 @@
 			<div class="navbar-default sidebar" role="navigation">
 				<div class="sidebar-nav navbar-collapse">
 					<ul class="nav" id="side-menu">
+						<li style="text-align: center">
+							<p>MRR Balance: <code id="mrrBalance"></code></p>
+						</li>
 						<li class="sidebar-search">
 							<div class="input-group custom-search-form">
 								<input type="text" class="form-control" placeholder="Search...">
@@ -166,6 +169,7 @@
 			<!-- /.row -->
 			<div class="row">
 				<div class="col-lg-8">
+					<div class="alert alert-warning" role="alert" id="lowBalanceWarning">You have <strong id="walletBalanceDaysLeft">0</strong> BTC left in your wallet. It is estimated you will run out of funding in ~<strong id="daysLeft"></strong> days.</div>
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<i class="fa fa-bar-chart-o fa-fw"></i> Hashrate History
@@ -490,6 +494,7 @@
 		var rentals = true;
 		var errors = true;
 
+		var config = {};
 		var logs = {};
 		var rentalLogs = {};
 
@@ -508,6 +513,7 @@
 			$('#logList').empty();
 			var data = logs;
 			var numAppended = 0;
+			var latestBalance = 0;
 			for (var i = 0; i < data.logs.length; i++) {
 				if (numAppended >= 1000)
 					continue;
@@ -541,6 +547,10 @@
 				if (message.includes("Current balance is")){
 					color = "warning"
 					fontAwe = "money"
+
+					if (latestBalance === 0){
+						latestBalance = parseFloat(message.replace('Current balance is: ', ''));
+					}
 				}
 				if (message.includes("Updat")){
 					color = "default"
@@ -562,6 +572,15 @@
 				}
 				numAppended++;
 			}
+
+			var fundingDaysLeft = latestBalance / (config.weekly_budget_btc / 7);
+			if (fundingDaysLeft <= 7){
+				$('#walletBalanceDaysLeft').text(latestBalance);
+				$('#daysLeft').text(fundingDaysLeft.toFixed(1));
+				$('#lowBalanceWarning').show();
+			}
+
+			$('#mrrBalance').text(latestBalance);
 
 			// Load BTC spent in last week & Spending history.
 		    $('#spendingTableBody').empty();
@@ -595,6 +614,14 @@
 			}
 
 			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek).toFixed(8) + ' BTC');
+		}
+
+		var getBalance = function(){
+			if (logs){
+				for (var i = logs.logs.length - 1; i >= 0; i--) {
+					logs.logs[i]
+				}
+			}
 		}
 
 		var getLogs = function(){
@@ -646,7 +673,7 @@
 					}
 					if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
 							maxHashrate = parseFloat(logTotalHashrate);
-						
+
 					var timestamp = rentalLogs.logs[i].timestamp;
 					data['period'] = timestamp * 1000;
 					chartData.push(data);
@@ -715,6 +742,7 @@
 				if (!data.success && !data.weekly_budget_btc)
 					alert(data.message);
 				else {
+					config = data;
 					// Update server IP
 					$('#serverIP').text(serv);
 					// Password is correct, if "remember me" is set, save to local storage, if not just load the Dashboard/API and save the variable locally.
@@ -813,6 +841,9 @@
 			getLogs();
 			getRental();
 		}
+
+		// Default hide the following
+		$('#lowBalanceWarning').hide();
 	</script>
 
 </body>
