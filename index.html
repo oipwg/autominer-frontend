@@ -715,19 +715,22 @@
 			// Load number of current miners
 		    if (rentalLogs.logs[0]){
 		    	var resJSON = JSON.parse(rentalLogs.logs[0].response);
-		    	var numberOfMiners = resJSON.data.records.length;
-		    	if (numberOfMiners == 1)
-		    		$('#numberOfMinersLabel').text('Current Miner');
-		    	else
-		    		$('#numberOfMinersLabel').text('Current Miners');
+		    	if (resJSON.data){
+			    	var numberOfMiners = resJSON.data.records.length;
+			    	if (numberOfMiners == 1)
+			    		$('#numberOfMinersLabel').text('Current Miner');
+			    	else
+			    		$('#numberOfMinersLabel').text('Current Miners');
 
-		    	$('#numberOfMiners').text(numberOfMiners);
+			    	$('#numberOfMiners').text(numberOfMiners);
 
-		    	var hashrate = 0;
-		    	for (var i = 0; i < resJSON.data.records.length; i++) {
-		    		hashrate += resJSON.data.records[i].current.hash_30m;
-		    	}
-		    	$('#hashrateText').text((hashrate / 1000000).toFixed(2) + "MH/s");
+			    	var hashrate = 0;
+			    	for (var i = 0; i < resJSON.data.records.length; i++) {
+			    		hashrate += parseFloat(parseFloat(resJSON.data.records[i].current.hash_30m) / 1000000);
+			    	}
+
+			    	$('#hashrateText').text(hashrate.toFixed(2) + " MH/s");
+			    }
 		    }
 
 		}
