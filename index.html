@@ -53,7 +53,7 @@
 				</button>
 				<div class="navbar-brand" style="margin-top: -6px">
 					<img style="float: left;" src="./img/alexandria-logo.png" width="30px" height="30px" />
-					<a class="navbar-brand" style="margin-top: -10px; margin-left: -5px; font-size: 20px" href="index.html">ΛLΞXΛNDRIΛ Autominer</a>
+					<a class="navbar-brand" style="margin-top: -10px; margin-left: -5px; font-size: 20 px" href="index.html">ΛLΞXΛNDRIΛ Autominer</a>
 				</div>
 			</div>
 			<p style="text-align: center; margin-top: 10px; margin-bottom: -5px;">Connected to server: <code id="serverIP"></code><button class="btn btn-outline btn-warning" onclick="showLogin()">Edit</button></p>
@@ -199,6 +199,36 @@
 						<!-- /.panel-heading -->
 						<div class="panel-body">
 							<div id="hashrate-chart"></div>
+						</div>
+						<!-- /.panel-body -->
+					</div>
+					<!-- /.panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<i class="fa fa-bar-chart-o fa-fw"></i> Historian Data
+							<div class="pull-right">
+								<div class="btn-group">
+									<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+										Actions
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu pull-right" role="menu">
+										<li><a href="#">Action</a>
+										</li>
+										<li><a href="#">Another action</a>
+										</li>
+										<li><a href="#">Something else here</a>
+										</li>
+										<li class="divider"></li>
+										<li><a href="#">Separated link</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<!-- /.panel-heading -->
+						<div class="panel-body">
+							<div id="historian-chart"></div>
 						</div>
 						<!-- /.panel-body -->
 					</div>
@@ -602,6 +632,7 @@
 					}
 
 					if (numAppended < 10) {
+						console.log(data.logs[i]);
 						var time = new Date(data.logs[i].timestamp * 1000);
 						var message = data.logs[i].message;
 						message.replace('Successfully rented rig: ', 'Rented Rig #');
@@ -684,12 +715,12 @@
 				chartlabels.push(miners[miner]);
 				chartykeys.push(parseInt(miner));
 			}
-			for (var data in chartData){
+			/*for (var data in chartData){
 				for (var miner in miners) {
 					if (!chartData[data][miner])
 						chartData[data][miner] = 0;
 				}
-			}
+			}*/
 
 			console.log(chartData);
 			console.log(chartykeys);
@@ -712,6 +743,8 @@
 		        labels: chartlabels,
 		        pointSize: 2,
 		        hideHover: 'auto',
+		        continuousLine: true,
+		        behaveLikeLine: false,
 		        resize: true
 		    });
 
@@ -735,7 +768,47 @@
 			    	$('#hashrateText').text(hashrate.toFixed(2) + " MH/s");
 			    }
 		    }
+		}
 
+		var loadHistorian = function(){
+			var timeNow = (Date.now()/1000).toFixed(0);
+			var timeDayAgo = timeNow - (60*60*24*7);
+			$.post('https://api.alexandria.io/alexandria/v1/historian/summary', '{ "min-time": ' + timeDayAgo + ', "max-time": ' + timeNow + ' }', function(data, status){
+				console.log(data);
+				if (data['data-points']){
+					var points = data['data-points'];
+					var historianChartData = [];
+					var dataPointsToWrite = 250;
+					// If less than 100 datapoints available, only plot those.
+					if (points.length < dataPointsToWrite){
+						dataPointsToWrite = points.length;
+					}
+					for (var i = dataPointsToWrite - 1; i >= 0; i--) {
+						historianChartData.push({ block: (points[i].blockTime * 1000), pool_hashrate: (points[i].pool_hashrate/1000000).toFixed(2), fbd_networkhashps: (points[i].fbd_networkhashps/1000000).toFixed(2) });
+					}
+					console.log(historianChartData);
+
+					Morris.Area({
+				        element: 'historian-chart',
+				        data: historianChartData,
+				        xkey: 'block',
+				        ykeys: ['pool_hashrate', 'fbd_networkhashps'],
+				        labels: ['pool_hashrate', 'fbd_networkhashps'],
+				        xLabels: ['day'],
+				        postUnits: "MH/s",
+				        pointSize: 2,
+				        hideHover: 'auto',
+				        continuousLine: false,
+				        behaveLikeLine: true,
+				        resize: true,
+				        parseTime: true
+				    });
+				} else {
+					console.log(data);
+				}
+			}, 'JSON').fail(function(err) {
+			    console.log( err );
+			});
 		}
 
 		var login = function(){
@@ -765,6 +838,7 @@
 					    getLogs();
 						getRental();
 						showDashboard();
+						loadHistorian();
 					} else {
 						apiServer = serv;
 						apipw = password;
@@ -773,6 +847,7 @@
 					    getLogs();
 						getRental();
 					    showDashboard();
+						loadHistorian();
 					}
 				}
 
@@ -887,6 +962,7 @@
 			showDashboard();
 			getLogs();
 			getRental();
+			loadHistorian();
 		}
 
 		// Default hide the following
