@@ -657,7 +657,7 @@
 		}
 
 		var getLogs = function(){
-			$.post('http://' + apiServer + '/logs', {api_key: apipw, amount: -1}, function(data, status){
+			$.post('https://' + apiServer + '/logs', {api_key: apipw, amount: -1}, function(data, status){
 				logs = data;
 				console.log(logs);
 				appendLogs();
@@ -665,7 +665,7 @@
 		}
 
 		var getRental = function(){
-			$.post('http://' + apiServer + '/rentals', {api_key: apipw, amount: -1}, function(data, status){
+			$.post('https://' + apiServer + '/rentals', {api_key: apipw, amount: -1}, function(data, status){
 				rentalLogs = data;
 				console.log(rentalLogs);
 				loadDashboard();
@@ -815,7 +815,7 @@
 			var serv = $('#apiServer').val();
 			var password = $('#apiPassword').val();
 
-			$.post('http://' + serv + '/config', {api_key: password}, function(data, status){
+			$.post('https://' + serv + '/config', {api_key: password}, function(data, status){
 				if (!data.success && !data.weekly_budget_btc)
 					alert(data.message);
 				else {
