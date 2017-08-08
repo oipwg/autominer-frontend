@@ -235,6 +235,35 @@
 					<!-- /.panel -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
+							Earning History
+						</div>
+						<!-- /.panel-heading -->
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="table-responsive">
+										<table class="table table-bordered table-hover table-striped">
+											<thead>
+												<tr>
+													<th>Date</th>
+													<th>Time</th>
+												</tr>
+											</thead>
+											<tbody id="earningTableBody">
+											</tbody>
+										</table>
+									</div>
+									<!-- /.table-responsive -->
+								</div>
+								<!-- /.col-lg-8 (nested) -->
+							</div>
+							<!-- /.row -->
+						</div>
+						<!-- /.panel-body -->
+					</div>
+					<!-- /.panel -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
 							Spending History
 						</div>
 						<!-- /.panel-heading -->
@@ -811,6 +840,33 @@
 			});
 		}
 
+		var loadWalletInfo = function(address){
+			$.get('https://florinsight.alexandria.io/api/txs/?address=' + address, function(data, status){
+				// Load earned FLO into chart
+			    $('#earningTableBody').empty();
+
+			    var numAppended = 0;
+			    var recievedThisWeek = 0;
+			    for (var i = 0; i < data.txs.length; i++) {
+					if (data.txs[i].time > (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
+						recievedThisWeek += parseFloat(data.txs[i].valueIn);
+
+						if (numAppended < 10 && data.txs[i].valueIn > 0) {
+							var time = new Date(data.txs[i].time * 1000);
+							var message = "Recieved " + data.txs[i].valueIn + " FLO";
+							$('#earningTableBody').append('<tr class="success">\
+								<td>' + message + '</td>\
+								<td>' + time + '</td>\
+							</tr>')
+							numAppended++;
+						}
+					}
+				}
+			}, 'JSON').fail(function(err) {
+			    console.log( err );
+			});
+		}
+
 		var login = function(){
 			var serv = $('#apiServer').val();
 			var password = $('#apiPassword').val();
@@ -822,6 +878,13 @@
 					config = data;
 
 					loadConfig();
+
+					for (var i = 0; i < config.profiles.length; i++) {
+						if (config.profiles[i].id === parseInt(config.profileid)){
+							config.floaddress = config.profiles[i].pools[0].workername;
+							loadWalletInfo(config.floaddress);
+						}
+					}
 
 					// Update server IP
 					$('#serverIP').text(serv);
