@@ -40,7 +40,7 @@
 
 <body>
 
-	<div id="wrapper">
+	<div id="wrapper" class="wrapper">
 
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -479,55 +479,93 @@
 		</div>
 		<!-- /#logs -->
 
-		<!-- #login -->
-		<div id="page-wrapper" class="login">
-			<div class="row">
-				<div class="col-lg-12">
-					<h1 class="page-header">Please Login!</h1>
-				</div>
-				<!-- /.col-lg-12 -->
+		
+
+	</div>
+	<!-- /#wrapper -->
+	<!-- #login -->
+	<div id="" class="container text-center login">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Login to MiningRigRentals</h1>
 			</div>
-			<!-- /.row -->
-			<div class="row">
-				
-			</div>
-			<!-- /.row -->
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="form-horizontal">
-						<div class="form-group">
-							<label for="inputEmail3" class="col-sm-4 control-label">API Server (ip:port i.e. 127.0.0.1:3123)</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="apiServer" placeholder="">
-							</div>
+			<div class="col-offset-2 col-lg-10">
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label for="inputEmail3" class="col-sm-4 control-label">MiningRigRentals API Key</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="mrr_key" placeholder="">
 						</div>
-						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-4 control-label">API Password</label>
-							<div class="col-sm-8">
-								<input type="password" class="form-control" id="apiPassword" placeholder="">
-							</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">MiningRigRentals API Secret</label>
+						<div class="col-sm-8">
+							<input type="password" class="form-control" id="mrr_secret" placeholder="">
 						</div>
-						<div class="form-group">
-							<label for="inputPassword3" class="col-sm-4 control-label">Remember Me</label>
-							<div class="col-sm-8">
-								<input type="checkbox" id="rememberMeCheckbox"> Keep me logged in
-								<p class="help-block">If this box is checked the application will stay logged in on this browser until you press the logout button. This persists between sessions.</p>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-offset-4 col-sm-8">
-								<button class="btn btn-default" onclick="login()">Login</button>
-							</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-6 col-sm-1">
+							<button class="btn btn-default btn-success" onclick="install()">Login</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- /.row -->
 		</div>
-		<!-- /#login -->
-
+		<!-- /.row -->
 	</div>
-	<!-- /#wrapper -->
+	<!-- /#login -->
+
+	<!-- #install2 -->
+	<div id="install2" class="container text-center install2">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Please set your initial settings</h1>
+			</div>
+			<div class="col-offset-4 col-lg-8">
+				<div class="form-horizontal">
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">Weekly BTC Budget</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="setupweeklyBTCBudget" placeholder="0.01">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">Minimum Margin</label>
+						<div class="col-sm-2">
+							<input type="number" class="form-control" id="setupminimumMargin" placeholder="0">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">Rental Length</label>
+						<div class="col-sm-2">
+							<input type="number" class="form-control" id="setuprentalLength" placeholder="24">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">RPI Threshold</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="setuprpiThreashold" placeholder="80">
+							<p class="help-block">Minimum RPI (Rating based on avaiablility and past success) to rent rigs at. Will not rent any rigs under this RPI.</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputPassword3" class="col-sm-4 control-label">Profile</label>
+						<div class="col-sm-4">
+							<select class="form-control" id="setupprofileSelect">
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-6 col-sm-1">
+							<button class="btn btn-default btn-success" onclick="installTwo()">Finish Setup</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<!-- /#install2 -->
 
 	<!-- jQuery -->
 	<script src="./js/jquery.min.js"></script>
@@ -550,6 +588,8 @@
 		var loggedIn = false;
 		var server = "";
 		var apipw = "";
+
+		var serv = "localhost:3123"
 
 		var info = true;
 		var rentals = true;
@@ -721,35 +761,38 @@
 
 			// chartData.push({period: ((Math.floor(Date.now() / 1000)) - (60*60*24)) * 1000 });
 
-			for (var i = 0; i < rentalLogs.logs.length; i++) {
-				var responseJSON = JSON.parse(rentalLogs.logs[i].response);
-				var data = {};
-				if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24)){
-					continue;
-				}
-				if(responseJSON.data){
-					var logTotalHashrate = 0;
-					for (var j = 0; j < responseJSON.data.records.length; j++) {
-						var minerID = responseJSON.data.records[j].id;
-						var minerName = responseJSON.data.records[j].name;
-						var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
-
-						logTotalHashrate += parseFloat(minerCurrentHashrate);
-
-
-						if (!miners[minerID])
-							miners[minerID] = minerName;
-
-						data[minerID] = minerCurrentHashrate
+			if (rentalLogs.logs){
+				for (var i = 0; i < rentalLogs.logs.length; i++) {
+					var responseJSON = JSON.parse(rentalLogs.logs[i].response);
+					var data = {};
+					if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24)){
+						continue;
 					}
-					if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
-							maxHashrate = parseFloat(logTotalHashrate);
+					if(responseJSON.data){
+						var logTotalHashrate = 0;
+						for (var j = 0; j < responseJSON.data.records.length; j++) {
+							var minerID = responseJSON.data.records[j].id;
+							var minerName = responseJSON.data.records[j].name;
+							var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
 
-					var timestamp = rentalLogs.logs[i].timestamp;
-					data['period'] = timestamp * 1000;
-					chartData.push(data);
+							logTotalHashrate += parseFloat(minerCurrentHashrate);
+
+
+							if (!miners[minerID])
+								miners[minerID] = minerName;
+
+							data[minerID] = minerCurrentHashrate
+						}
+						if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
+								maxHashrate = parseFloat(logTotalHashrate);
+
+						var timestamp = rentalLogs.logs[i].timestamp;
+						data['period'] = timestamp * 1000;
+						chartData.push(data);
+					}
 				}
 			}
+				
 			for (var miner in miners){
 				chartlabels.push(miners[miner]);
 				chartykeys.push(parseInt(miner));
@@ -788,7 +831,7 @@
 		    });
 
 			// Load number of current miners
-		    if (rentalLogs.logs[0]){
+		    if (rentalLogs.logs && rentalLogs.logs[0]){
 		    	var resJSON = JSON.parse(rentalLogs.logs[0].response);
 		    	if (resJSON.data){
 			    	var numberOfMiners = resJSON.data.records.length;
@@ -877,9 +920,83 @@
 			});
 		}
 
+		var install = function(){
+			var key = $('#mrr_key').val();
+			var sec = $('#mrr_secret').val();
+
+			$.post('http://' + serv + '/install', {"MRR_API_key": key, "MRR_API_secret": sec}, function(data, status){
+				if (!data.success){
+					showInstallTwo();
+					//alert(data.message);
+				}
+				else {
+					console.log(data);
+					$.get('http://' + serv + '/install2', function(data, status){
+						console.log(data);
+						if (!data.success){
+							alert(data.message);
+						} else {
+
+							config.profiles = data.data;
+
+							if (config.profiles){
+								for (var i = config.profiles.length - 1; i >= 0; i--) {
+									var id = config.profiles[i].id;
+									var name = config.profiles[i].name;
+
+									var x = document.getElementById("setupprofileSelect");
+									var option = document.createElement("option");
+									option.id = id;
+									option.text = name + " (" + id + ")";
+									x.add(option);
+
+									if (id == config.profileid)
+										x.value = name + " (" + id + ")";
+								}
+							}
+							console.log(data);
+							
+						}
+
+						//console.log(data);
+					}, 'JSON').fail(function(err) {
+					    console.log( err );
+					});
+				}
+
+				//console.log(data);
+			}, 'JSON').fail(function(err) {
+			    console.log( err );
+			});
+		}
+
+		var installTwo = function(){
+			var setupweeklyBTCBudget = $('#setupweeklyBTCBudget').val();
+			var setupminimumMargin = $('#setupminimumMargin').val();
+			var setuprentalLength = $('#setuprentalLength').val();
+			var setuprpiThreashold = $('#setuprpiThreashold').val();
+			var setupprofileSelect = $('#setupprofileSelect').find(":selected").id;
+
+			var genApiKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
+
+			localStorage.apk = genApiKey;
+
+			$.post('http://' + serv + '/install2', {"weekly_budget_btc": setupweeklyBTCBudget, "min_margin": setupminimumMargin, "RPI_threshold": setuprpiThreashold, "rental_length_hrs": setuprentalLength, "api_key": genApiKey}, function(data, status){
+				if (!data.success)
+					alert(data.message);
+				else {
+					console.log(data);
+				}
+
+				//console.log(data);
+			}, 'JSON').fail(function(err) {
+			    console.log( err );
+			});
+		}
+
 		var login = function(){
-			var serv = $('#apiServer').val();
-			var password = $('#apiPassword').val();
+			var serv = $('#mrr_key').val();
+			var password = $('#mrr_secret').val();
 
 			$.post('http://' + serv + '/config', {api_key: password}, function(data, status){
 				if (!data.success && !data.weekly_budget_btc)
@@ -989,6 +1106,7 @@
 			$('.config').hide();
 			$('.logs').hide();
 			$('.login').hide();
+			$('.install2').hide();
 		}
 
 		var showConfig = function(){
@@ -998,6 +1116,7 @@
 			$('.config').show();
 			$('.logs').hide();
 			$('.login').hide();
+			$('.install2').hide();
 		}
 
 		var showLogs = function(){
@@ -1007,29 +1126,39 @@
 			$('.config').hide();
 			$('.logs').show();
 			$('.login').hide();
+			$('.install2').hide();
 		}
 
 		var showLogin = function(){
 			$('.dashboard').hide();
 			$('.config').hide();
 			$('.logs').hide();
+			$('.wrapper').hide();
 			$('.login').show();
+			$('.install2').hide();
+		}
+
+		var showInstallTwo = function(){
+			$('.dashboard').hide();
+			$('.config').hide();
+			$('.logs').hide();
+			$('.wrapper').hide();
+			$('.login').hide();
+			$('.install2').show();
 		}
 
 		if (typeof(Storage) !== "undefined") {
 		    // Code for localStorage/sessionStorage.
-		    if (localStorage.as){
+		    if (localStorage.as && localStorage.ap){
 		    	apiServer = localStorage.as;
-		    }
-		    if (localStorage.ap){
 		    	apipw = localStorage.ap;
-		    }
 
-		    if (apiServer && apipw){
-		    	$('#apiServer').val(apiServer);
-		    	$('#apiPassword').val(apipw);
-		    	$('#rememberMeCheckbox').attr('checked','checked');
-		    	login();
+		    	if (apiServer && apipw){
+			    	$('#apiServer').val(apiServer);
+			    	$('#apiPassword').val(apipw);
+			    	$('#rememberMeCheckbox').attr('checked','checked');
+			    	login();
+			    }
 		    }
 		} else {
 		    // Sorry! No Web Storage support..
