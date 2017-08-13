@@ -40,7 +40,7 @@
 
 <body>
 
-	<div id="wrapper" class="wrapper">
+	<div id="wrapper">
 
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -56,14 +56,47 @@
 					<a class="navbar-brand" style="margin-top: -10px; margin-left: -5px; font-size: 20 px" href="index.html">ΛLΞXΛNDRIΛ Autominer</a>
 				</div>
 			</div>
-			<p style="text-align: center; margin-top: 10px; margin-bottom: -5px;">Connected to server: <code id="serverIP"></code><button class="btn btn-outline btn-warning" onclick="showLogin()">Edit</button></p>
-			<div style="margin-top: -37px; margin-right: 20px"><button class="btn btn-outline btn-danger pull-right" onclick="logout()">Logout</button></div>
+			<p style="text-align: center; margin-top: 10px; margin-bottom: -5px;">Connected to server: <code id="serverIP"></code><button class="btn btn-outline btn-primary" onclick="showLogin()">Edit</button></p>
+			<div style="margin-top: -37px; margin-right: 20px"><button class="btn btn-outline btn-primary pull-right" onclick="logout()">Logout</button></div>
 
 			<div class="navbar-default sidebar" role="navigation">
 				<div class="sidebar-nav navbar-collapse">
 					<ul class="nav" id="side-menu">
 						<li style="text-align: center">
-							<p>MRR Balance: <code id="mrrBalance"></code></p>
+							<p>Mining Rig Rentals Balance:<br>
+							<code id="mrrBalance"></code> BTC</p>
+<!--
+<a class="coinbase-widget"
+       id="coinbase_widget"
+       data-address=""
+       data-amount="10"
+       data-code="0f8c42ba-3a1f-5f59-a809-20f677ec9501"
+       data-currency="USD"
+       data-crypto_currency="BTC"
+       href="">Top up with Coinbase</a>
+    
+    <script type='text/javascript' id='coinbase_widget_loader' class='coinbase-widget-async-loader'>
+      document.currentScript.src ='';
+      (function() {
+        function asyncLoad() {
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          var theUrl = 'https://buy.coinbase.com/static/widget.js';
+          s.src = theUrl+ (theUrl.indexOf("?") >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(window.location.href);
+          var embedder = document.getElementById('coinbase_widget_loader');
+          embedder.parentNode.insertBefore(s, embedder);
+        }
+        if (window.attachEvent) {
+          window.attachEvent('onload', asyncLoad);
+        } else {
+          window.addEventListener('load', asyncLoad, false);
+        }
+      })();
+    </script>-->
+    
+
+							<!--<p><a href="https://buy.coinbase.com?code=0f8c42ba-3a1f-5f59-a809-20f677ec9501&address=199AA1kcUGpLgh65v5YsDc1tMQcp5ThPbZ&crypto_currency=BTC">Top up with Coinbase</a>	-->						
 						</li>
 						<li class="sidebar-search">
 							<div class="input-group custom-search-form">
@@ -83,6 +116,9 @@
 							<a href="#" onclick="showConfig()"><i class="fa fa-check-square-o fa-fw"></i> Config</a>
 						</li>
 						<li>
+							<a href="#" onclick="showFundrentals()"><i class="fa fa-credit-card fa-fw"></i> Fund Rentals</a>
+						</li>
+						<li>
 							<a href="#" onclick="showLogs()"><i class="fa fa-list fa-fw"></i> Logs</a>
 						</li>
 					</ul>
@@ -96,15 +132,14 @@
 		<div id="page-wrapper" class="dashboard">
 			<div class="row">
 				<div class="col-lg-12">
-					<br />
-					<div class="alert alert-info text-center" role="alert"><strong>Status: </strong><span id="status"></span></div>
+					<h1 class="page-header">Dashboard</h1>
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>
 			<!-- /.row -->
 			<div class="row">
 				<div class="col-lg-4 col-md-4">
-					<div class="panel panel-green">
+					<div class="panel panel-blue-1">
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
@@ -126,7 +161,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-4">
-					<div class="panel panel-red">
+					<div class="panel panel-blue-2">
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
@@ -148,7 +183,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-4">
-					<div class="panel panel-yellow">
+					<div class="panel panel-blue-3">
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-xs-3">
@@ -230,35 +265,6 @@
 						<!-- /.panel-heading -->
 						<div class="panel-body">
 							<div id="historian-chart"></div>
-						</div>
-						<!-- /.panel-body -->
-					</div>
-					<!-- /.panel -->
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							Earning History
-						</div>
-						<!-- /.panel-heading -->
-						<div class="panel-body">
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="table-responsive">
-										<table class="table table-bordered table-hover table-striped">
-											<thead>
-												<tr>
-													<th>Date</th>
-													<th>Time</th>
-												</tr>
-											</thead>
-											<tbody id="earningTableBody">
-											</tbody>
-										</table>
-									</div>
-									<!-- /.table-responsive -->
-								</div>
-								<!-- /.col-lg-8 (nested) -->
-							</div>
-							<!-- /.row -->
 						</div>
 						<!-- /.panel-body -->
 					</div>
@@ -397,6 +403,100 @@
 		</div>
 		<!-- /#config -->
 
+		<!-- #fund rentals -->
+		<div id="page-wrapper" class="fundrentals">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Fund Rentals</h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<div class="panel panel-blue-1">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-credit-card fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge" id="mrrBalance">0</div>
+									<div id="numberOfMinersLabel">BTC</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+							<div style="text-align: center">
+	<a class="coinbase-widget"
+       id="coinbase_widget"
+       data-address=""
+       data-amount="5"
+       data-code="0f8c42ba-3a1f-5f59-a809-20f677ec9501"
+       data-currency="USD"
+       data-crypto_currency="BTC"
+       href="">Top up with Coinbase</a>
+    
+    <script type='text/javascript' id='coinbase_widget_loader' class='coinbase-widget-async-loader'>
+      document.currentScript.src ='';
+      (function() {
+        function asyncLoad() {
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          var theUrl = 'https://buy.coinbase.com/static/widget.js';
+          s.src = theUrl+ (theUrl.indexOf("?") >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(window.location.href);
+          var embedder = document.getElementById('coinbase_widget_loader');
+          embedder.parentNode.insertBefore(s, embedder);
+        }
+        if (window.attachEvent) {
+          window.attachEvent('onload', asyncLoad);
+        } else {
+          window.addEventListener('load', asyncLoad, false);
+        }
+      })();
+    </script></div>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<div class="panel panel-blue-2">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-xs-3">
+									<i class="fa fa-btc fa-5x"></i>
+								</div>
+								<div class="col-xs-9 text-right">
+									<div class="huge" id="hashrateText">0MH/s</div>
+									<div id="">Current Hashrate</div>
+								</div>
+							</div>
+						</div>
+						<a href="#">
+							<div class="panel-footer">
+								<div style="text-align: center">
+								<button class="btn btn-lg" onclick="login()">Login</button>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				</div>
+			</div>
+
+			<div class="row">
+
+			</div>
+			<!-- /.row -->
+			
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /#config -->
+
+
 		<!-- #logs -->
 		<div id="page-wrapper" class="logs">
 			<div class="row">
@@ -479,93 +579,55 @@
 		</div>
 		<!-- /#logs -->
 
-		
+		<!-- #login -->
+		<div id="page-wrapper" class="login">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Please Login!</h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				
+			</div>
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label for="inputEmail3" class="col-sm-4 control-label">API Server (ip:port i.e. 127.0.0.1:3123)</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="apiServer" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">API Password</label>
+							<div class="col-sm-8">
+								<input type="password" class="form-control" id="apiPassword" placeholder="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputPassword3" class="col-sm-4 control-label">Remember Me</label>
+							<div class="col-sm-8">
+								<input type="checkbox" id="rememberMeCheckbox"> Keep me logged in
+								<p class="help-block">If this box is checked the application will stay logged in on this browser until you press the logout button. This persists between sessions.</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+								<button class="btn btn-default" onclick="login()">Login</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.row -->
+		</div>
+		<!-- /#login -->
 
 	</div>
 	<!-- /#wrapper -->
-	<!-- #login -->
-	<div id="" class="container text-center login">
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">Login to MiningRigRentals</h1>
-			</div>
-			<div class="col-offset-2 col-lg-10">
-				<div class="form-horizontal">
-					<div class="form-group">
-						<label for="inputEmail3" class="col-sm-4 control-label">MiningRigRentals API Key</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="mrr_key" placeholder="">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">MiningRigRentals API Secret</label>
-						<div class="col-sm-8">
-							<input type="password" class="form-control" id="mrr_secret" placeholder="">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-offset-6 col-sm-1">
-							<button class="btn btn-default btn-success" onclick="install()">Login</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /.row -->
-	</div>
-	<!-- /#login -->
-
-	<!-- #install2 -->
-	<div id="install2" class="container text-center install2">
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">Please set your initial settings</h1>
-			</div>
-			<div class="col-offset-4 col-lg-8">
-				<div class="form-horizontal">
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">Weekly BTC Budget</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="setupweeklyBTCBudget" placeholder="0.01">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">Minimum Margin</label>
-						<div class="col-sm-2">
-							<input type="number" class="form-control" id="setupminimumMargin" placeholder="0">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">Rental Length</label>
-						<div class="col-sm-2">
-							<input type="number" class="form-control" id="setuprentalLength" placeholder="24">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">RPI Threshold</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="setuprpiThreashold" placeholder="80">
-							<p class="help-block">Minimum RPI (Rating based on avaiablility and past success) to rent rigs at. Will not rent any rigs under this RPI.</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword3" class="col-sm-4 control-label">Profile</label>
-						<div class="col-sm-4">
-							<select class="form-control" id="setupprofileSelect">
-							</select>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-offset-6 col-sm-1">
-							<button class="btn btn-default btn-success" onclick="installTwo()">Finish Setup</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /.row -->
-	</div>
-	<!-- /#install2 -->
 
 	<!-- jQuery -->
 	<script src="./js/jquery.min.js"></script>
@@ -588,8 +650,6 @@
 		var loggedIn = false;
 		var server = "";
 		var apipw = "";
-
-		var serv = "localhost:3123"
 
 		var info = true;
 		var rentals = true;
@@ -702,7 +762,7 @@
 					}
 
 					if (numAppended < 10) {
-						//console.log(data.logs[i]);
+						console.log(data.logs[i]);
 						var time = new Date(data.logs[i].timestamp * 1000);
 						var message = data.logs[i].message;
 						message.replace('Successfully rented rig: ', 'Rented Rig #');
@@ -715,7 +775,7 @@
 				}
 			}
 
-			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek).toFixed(8) + ' BTC');
+			$('#btcSpentThisWeek').text(parseFloat(spentThisWeek).toFixed(4) + ' BTC');
 		}
 
 		var getBalance = function(){
@@ -729,7 +789,7 @@
 		var getLogs = function(){
 			$.post('http://' + apiServer + '/logs', {api_key: apipw, amount: -1}, function(data, status){
 				logs = data;
-				//console.log(logs);
+				console.log(logs);
 				appendLogs();
 			}, 'JSON');
 		}
@@ -737,16 +797,7 @@
 		var getRental = function(){
 			$.post('http://' + apiServer + '/rentals', {api_key: apipw, amount: -1}, function(data, status){
 				rentalLogs = data;
-				//console.log(rentalLogs);
-				loadDashboard();
-			}, 'JSON');
-		}
-
-		var getInfo = function(){
-			$.get('http://' + apiServer + '/info', function(data, status){
-				info = data;
-				document.getElementById('status').innerHTML = info.status;
-				//console.log(rentalLogs);
+				console.log(rentalLogs);
 				loadDashboard();
 			}, 'JSON');
 		}
@@ -761,38 +812,35 @@
 
 			// chartData.push({period: ((Math.floor(Date.now() / 1000)) - (60*60*24)) * 1000 });
 
-			if (rentalLogs.logs){
-				for (var i = 0; i < rentalLogs.logs.length; i++) {
-					var responseJSON = JSON.parse(rentalLogs.logs[i].response);
-					var data = {};
-					if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24)){
-						continue;
+			for (var i = 0; i < rentalLogs.logs.length; i++) {
+				var responseJSON = JSON.parse(rentalLogs.logs[i].response);
+				var data = {};
+				if (rentalLogs.logs[i].timestamp < (Math.floor(Date.now() / 1000)) - (60*60*24)){
+					continue;
+				}
+				if(responseJSON.data){
+					var logTotalHashrate = 0;
+					for (var j = 0; j < responseJSON.data.records.length; j++) {
+						var minerID = responseJSON.data.records[j].id;
+						var minerName = responseJSON.data.records[j].name;
+						var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
+
+						logTotalHashrate += parseFloat(minerCurrentHashrate);
+
+
+						if (!miners[minerID])
+							miners[minerID] = minerName;
+
+						data[minerID] = minerCurrentHashrate
 					}
-					if(responseJSON.data){
-						var logTotalHashrate = 0;
-						for (var j = 0; j < responseJSON.data.records.length; j++) {
-							var minerID = responseJSON.data.records[j].id;
-							var minerName = responseJSON.data.records[j].name;
-							var minerCurrentHashrate = (responseJSON.data.records[j].current.hash_30m / 1000000).toFixed(2);
+					if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
+							maxHashrate = parseFloat(logTotalHashrate);
 
-							logTotalHashrate += parseFloat(minerCurrentHashrate);
-
-
-							if (!miners[minerID])
-								miners[minerID] = minerName;
-
-							data[minerID] = minerCurrentHashrate
-						}
-						if (parseFloat(logTotalHashrate) > parseFloat(maxHashrate))
-								maxHashrate = parseFloat(logTotalHashrate);
-
-						var timestamp = rentalLogs.logs[i].timestamp;
-						data['period'] = timestamp * 1000;
-						chartData.push(data);
-					}
+					var timestamp = rentalLogs.logs[i].timestamp;
+					data['period'] = timestamp * 1000;
+					chartData.push(data);
 				}
 			}
-				
 			for (var miner in miners){
 				chartlabels.push(miners[miner]);
 				chartykeys.push(parseInt(miner));
@@ -804,15 +852,15 @@
 				}
 			}*/
 
-			//console.log(chartData);
-			//console.log(chartykeys);
-			//console.log(chartlabels);
+			console.log(chartData);
+			console.log(chartykeys);
+			console.log(chartlabels);
 
 			// Clear out before generating.
 			$('#hashrate-chart').empty();
 
 			maxHashrate += 25;
-			//console.log(maxHashrate);
+			console.log(maxHashrate);
 
 			Morris.Area({
 		        element: 'hashrate-chart',
@@ -831,7 +879,7 @@
 		    });
 
 			// Load number of current miners
-		    if (rentalLogs.logs && rentalLogs.logs[0]){
+		    if (rentalLogs.logs[0]){
 		    	var resJSON = JSON.parse(rentalLogs.logs[0].response);
 		    	if (resJSON.data){
 			    	var numberOfMiners = resJSON.data.records.length;
@@ -856,7 +904,7 @@
 			var timeNow = (Date.now()/1000).toFixed(0);
 			var timeDayAgo = timeNow - (60*60*24*7);
 			$.post('https://api.alexandria.io/alexandria/v1/historian/summary', '{ "min-time": ' + timeDayAgo + ', "max-time": ' + timeNow + ' }', function(data, status){
-				//console.log(data);
+				console.log(data);
 				if (data['data-points']){
 					var points = data['data-points'];
 					var historianChartData = [];
@@ -868,7 +916,7 @@
 					for (var i = dataPointsToWrite - 1; i >= 0; i--) {
 						historianChartData.push({ block: (points[i].blockTime * 1000), pool_hashrate: (points[i].pool_hashrate/1000000).toFixed(2), fbd_networkhashps: (points[i].fbd_networkhashps/1000000).toFixed(2) });
 					}
-					//console.log(historianChartData);
+					console.log(historianChartData);
 
 					Morris.Area({
 				        element: 'historian-chart',
@@ -886,117 +934,16 @@
 				        parseTime: true
 				    });
 				} else {
-					//console.log(data);
-				}
-			}, 'JSON').fail(function(err) {
-			    console.log( err );
-			});
-		}
-
-		var loadWalletInfo = function(address){
-			$.get('https://florinsight.alexandria.io/api/txs/?address=' + address, function(data, status){
-				// Load earned FLO into chart
-			    $('#earningTableBody').empty();
-
-			    var numAppended = 0;
-			    var recievedThisWeek = 0;
-			    for (var i = 0; i < data.txs.length; i++) {
-					if (data.txs[i].time > (Math.floor(Date.now() / 1000)) - (60*60*24*7)){
-						recievedThisWeek += parseFloat(data.txs[i].valueIn);
-
-						if (numAppended < 10 && data.txs[i].valueIn > 0) {
-							var time = new Date(data.txs[i].time * 1000);
-							var message = "Recieved " + data.txs[i].valueIn + " FLO";
-							$('#earningTableBody').append('<tr class="success">\
-								<td>' + message + '</td>\
-								<td>' + time + '</td>\
-							</tr>')
-							numAppended++;
-						}
-					}
-				}
-			}, 'JSON').fail(function(err) {
-			    console.log( err );
-			});
-		}
-
-		var install = function(){
-			var key = $('#mrr_key').val();
-			var sec = $('#mrr_secret').val();
-
-			$.post('http://' + serv + '/install', {"MRR_API_key": key, "MRR_API_secret": sec}, function(data, status){
-				if (!data.success){
-					showInstallTwo();
-					//alert(data.message);
-				}
-				else {
-					console.log(data);
-					$.get('http://' + serv + '/install2', function(data, status){
-						console.log(data);
-						if (!data.success){
-							alert(data.message);
-						} else {
-
-							config.profiles = data.data;
-
-							if (config.profiles){
-								for (var i = config.profiles.length - 1; i >= 0; i--) {
-									var id = config.profiles[i].id;
-									var name = config.profiles[i].name;
-
-									var x = document.getElementById("setupprofileSelect");
-									var option = document.createElement("option");
-									option.id = id;
-									option.text = name + " (" + id + ")";
-									x.add(option);
-
-									if (id == config.profileid)
-										x.value = name + " (" + id + ")";
-								}
-							}
-							console.log(data);
-							
-						}
-
-						//console.log(data);
-					}, 'JSON').fail(function(err) {
-					    console.log( err );
-					});
-				}
-
-				//console.log(data);
-			}, 'JSON').fail(function(err) {
-			    console.log( err );
-			});
-		}
-
-		var installTwo = function(){
-			var setupweeklyBTCBudget = $('#setupweeklyBTCBudget').val();
-			var setupminimumMargin = $('#setupminimumMargin').val();
-			var setuprentalLength = $('#setuprentalLength').val();
-			var setuprpiThreashold = $('#setuprpiThreashold').val();
-			var setupprofileSelect = $('#setupprofileSelect').find(":selected").id;
-
-			var genApiKey = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
-
-			localStorage.apk = genApiKey;
-
-			$.post('http://' + serv + '/install2', {"weekly_budget_btc": setupweeklyBTCBudget, "min_margin": setupminimumMargin, "RPI_threshold": setuprpiThreashold, "rental_length_hrs": setuprentalLength, "api_key": genApiKey}, function(data, status){
-				if (!data.success)
-					alert(data.message);
-				else {
 					console.log(data);
 				}
-
-				//console.log(data);
 			}, 'JSON').fail(function(err) {
 			    console.log( err );
 			});
 		}
 
 		var login = function(){
-			var serv = $('#mrr_key').val();
-			var password = $('#mrr_secret').val();
+			var serv = $('#apiServer').val();
+			var password = $('#apiPassword').val();
 
 			$.post('http://' + serv + '/config', {api_key: password}, function(data, status){
 				if (!data.success && !data.weekly_budget_btc)
@@ -1005,16 +952,6 @@
 					config = data;
 
 					loadConfig();
-
-					if (config.profiles){
-						for (var i = 0; i < config.profiles.length; i++) {
-							if (config.profiles[i].id === parseInt(config.profileid)){
-								config.floaddress = config.profiles[i].pools[0].workername;
-								loadWalletInfo(config.floaddress);
-							}
-						}
-					}
-						
 
 					// Update server IP
 					$('#serverIP').text(serv);
@@ -1044,7 +981,7 @@
 					}
 				}
 
-				//console.log(data);
+				console.log(data);
 			}, 'JSON').fail(function(err) {
 			    console.log( err );
 			});
@@ -1065,22 +1002,19 @@
 			$('#rentalLength').val(config.rental_length_hrs);
 			$('#weeklyBTCBudget').val(config.weekly_budget_btc);
 
-			if (config.profiles){
-				for (var i = config.profiles.length - 1; i >= 0; i--) {
-					var id = config.profiles[i].id;
-					var name = config.profiles[i].name;
+			for (var i = config.profiles.length - 1; i >= 0; i--) {
+				var id = config.profiles[i].id;
+				var name = config.profiles[i].name;
 
-					var x = document.getElementById("profileSelect");
-					var option = document.createElement("option");
-					option.id = id;
-					option.text = name + " (" + id + ")";
-					x.add(option);
+				var x = document.getElementById("profileSelect");
+				var option = document.createElement("option");
+				option.id = id;
+				option.text = name + " (" + id + ")";
+				x.add(option);
 
-					if (id == config.profileid)
-						x.value = name + " (" + id + ")";
-				}
+				if (id == config.profileid)
+					x.value = name + " (" + id + ")";
 			}
-				
 
 			if (config.spend_entire_weekly_at_once){
 				$('#spendEntireWeeklyCheckbox').attr('checked','checked');
@@ -1104,9 +1038,9 @@
 				return;
 			$('.dashboard').show();
 			$('.config').hide();
+			$('.fundrentals').hide();
 			$('.logs').hide();
 			$('.login').hide();
-			$('.install2').hide();
 		}
 
 		var showConfig = function(){
@@ -1114,51 +1048,54 @@
 				return;
 			$('.dashboard').hide();
 			$('.config').show();
+			$('.fundrentals').hide();
 			$('.logs').hide();
 			$('.login').hide();
-			$('.install2').hide();
 		}
+
+		var showFundrentals = function(){
+			if (!loggedIn)
+				return;
+			$('.dashboard').hide();
+			$('.config').hide();
+			$('.fundrentals').show();
+			$('.logs').hide();
+			$('.login').hide();
+		}
+		
 
 		var showLogs = function(){
 			if (!loggedIn)
 				return;
 			$('.dashboard').hide();
 			$('.config').hide();
+			$('.fundrentals').hide();
 			$('.logs').show();
 			$('.login').hide();
-			$('.install2').hide();
 		}
 
 		var showLogin = function(){
 			$('.dashboard').hide();
 			$('.config').hide();
+			$('.fundrentals').hide();
 			$('.logs').hide();
-			$('.wrapper').hide();
 			$('.login').show();
-			$('.install2').hide();
-		}
-
-		var showInstallTwo = function(){
-			$('.dashboard').hide();
-			$('.config').hide();
-			$('.logs').hide();
-			$('.wrapper').hide();
-			$('.login').hide();
-			$('.install2').show();
 		}
 
 		if (typeof(Storage) !== "undefined") {
 		    // Code for localStorage/sessionStorage.
-		    if (localStorage.as && localStorage.ap){
+		    if (localStorage.as){
 		    	apiServer = localStorage.as;
+		    }
+		    if (localStorage.ap){
 		    	apipw = localStorage.ap;
+		    }
 
-		    	if (apiServer && apipw){
-			    	$('#apiServer').val(apiServer);
-			    	$('#apiPassword').val(apipw);
-			    	$('#rememberMeCheckbox').attr('checked','checked');
-			    	login();
-			    }
+		    if (apiServer && apipw){
+		    	$('#apiServer').val(apiServer);
+		    	$('#apiPassword').val(apipw);
+		    	$('#rememberMeCheckbox').attr('checked','checked');
+		    	login();
 		    }
 		} else {
 		    // Sorry! No Web Storage support..
@@ -1172,8 +1109,6 @@
 			getRental();
 			loadHistorian();
 		}
-
-		getInfo();
 
 		// Default hide the following
 		$('#lowBalanceWarning').hide();
